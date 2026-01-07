@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
@@ -34,12 +35,21 @@ Route::prefix('admin')->group(function () {
     // Protected routes
     Route::middleware('admin')->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        // Route::get('/dashboard', function () {
+        //     return view('admin.dashboard');
+        // })->name('admin.dashboard');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+        Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
+        Route::get('/flowers', [AdminController::class, 'flowers'])->name('admin.flowers');
+        Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
+        
+
     });
+
 
 });
 

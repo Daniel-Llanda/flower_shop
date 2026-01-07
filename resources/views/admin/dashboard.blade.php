@@ -1,189 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>EveryDhay Admin Dashboard</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fff0f6; /* soft pink background */
-        }
+@extends('admin.layout')
 
-        /* Sidebar */
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding-top: 56px; /* navbar height */
-            background-color: #ffe6f0; /* pastel pink */
-            width: 220px;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-        }
+@section('content')
+    <div style="height: 50px;"></div>
 
-        .sidebar .nav-link {
-            color: #8b4d6b;
-            font-weight: 500;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            border-radius: 8px;
-            margin: 4px 10px;
-        }
-
-        .sidebar .nav-link.active,
-        .sidebar .nav-link:hover {
-            background-color: #f9c1d9; /* soft hover */
-            color: #fff;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Main content */
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            .content {
-                margin-left: 0;
-            }
-        }
-
-        /* Cards */
-        .card-dashboard {
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-        }
-
-        .card-pink {
-            background: linear-gradient(135deg, #f9c1d9, #ffcce3);
-            color: #5a2a3c;
-        }
-
-        .card-purple {
-            background: linear-gradient(135deg, #d8b4f8, #e9d5ff);
-            color: #4b1f6d;
-        }
-
-        .card-yellow {
-            background: linear-gradient(135deg, #fff4e6, #ffe8cc);
-            color: #a6631b;
-        }
-
-        .navbar-custom {
-            background-color: #ff66a3; /* pastel magenta */
-        }
-
-        .navbar-custom .navbar-brand,
-        .navbar-custom .btn-outline-light {
-            color: #fff;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Top Navbar -->
-<nav class="navbar navbar-expand-lg navbar-custom fixed-top shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">EveryDhay Admin</a>
-        <div class="ms-auto">
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button class="btn btn-outline-light btn-sm">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
-
-<!-- Sidebar -->
-<div class="sidebar d-none d-md-block">
-    <ul class="nav flex-column pt-3">
-        <li class="nav-item mb-1">
-            <a class="nav-link active" href="{{ route('admin.dashboard') }}">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </a>
-        </li>
-        <li class="nav-item mb-1">
-            <a class="nav-link" href="#">
-                <i class="bi bi-people"></i> Users
-            </a>
-        </li>
-        <li class="nav-item mb-1">
-            <a class="nav-link" href="#">
-                <i class="bi bi-basket"></i> Orders
-            </a>
-        </li>
-        <li class="nav-item mb-1">
-            <a class="nav-link" href="#">
-                <i class="bi bi-flower1"></i> Flowers
-            </a>
-        </li>
-        <li class="nav-item mb-1">
-            <a class="nav-link" href="#">
-                <i class="bi bi-file-earmark-text"></i> Reports
-            </a>
-        </li>
-    </ul>
-</div>
-
-<!-- Main Content -->
-<div class="content">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold" style="color: #8b4d6b;">Dashboard</h2>
-    </div>
-
-    <!-- Welcome Card -->
-    <div class="card card-dashboard mb-4 p-3 card-pink">
-        <div class="card-body">
-            <h4 class="card-title mb-2">Welcome, Admin 👋</h4>
-            <p class="card-text">
-                You are successfully logged in to the EveryDhay admin panel.
-            </p>
-        </div>
-    </div>
-
-    <!-- Stats Cards -->
     <div class="row g-3">
         <div class="col-md-4">
             <div class="card card-dashboard p-3 card-pink text-center">
                 <i class="bi bi-people fs-1 mb-2"></i>
-                <h5 class="card-title">Users</h5>
-                <p class="card-text fs-4">120</p>
+                <h5>Users</h5>
+                <p class="fs-4">120</p>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="card card-dashboard p-3 card-purple text-center">
                 <i class="bi bi-basket fs-1 mb-2"></i>
-                <h5 class="card-title">Orders</h5>
-                <p class="card-text fs-4">45</p>
+                <h5>Orders</h5>
+                <p class="fs-4">45</p>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="card card-dashboard p-3 card-yellow text-center">
                 <i class="bi bi-flower1 fs-1 mb-2"></i>
-                <h5 class="card-title">Flowers</h5>
-                <p class="card-text fs-4">78</p>
+                <h5>Flowers</h5>
+                <p class="fs-4">78</p>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="row g-3 mt-4">
+
+        <!-- LEFT: FLOWER ITEMS -->
+        <div class="col-md-7">
+            <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Flower POS</h5>
+
+            <div class="row g-3">
+
+                <!-- Flower Item -->
+                <div class="col-md-4">
+                    <div class="card card-dashboard card-pink text-center p-3 pos-item"
+                        onclick="addToCart('Rose Bouquet', 1200)">
+                        <i class="bi bi-flower1 fs-1 mb-2"></i>
+                        <h6>Rose Bouquet</h6>
+                        <p class="fw-bold">₱1,200</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-dashboard card-purple text-center p-3 pos-item"
+                        onclick="addToCart('Tulip Bundle', 950)">
+                        <i class="bi bi-flower1 fs-1 mb-2"></i>
+                        <h6>Tulip Bundle</h6>
+                        <p class="fw-bold">₱950</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-dashboard card-yellow text-center p-3 pos-item"
+                        onclick="addToCart('Sunflower Set', 850)">
+                        <i class="bi bi-flower1 fs-1 mb-2"></i>
+                        <h6>Sunflower Set</h6>
+                        <p class="fw-bold">₱850</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT: POS CART -->
+        <div class="col-md-5">
+            <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Order List</h5>
+
+            <div class="card card-dashboard p-3">
+                <ul class="list-group mb-3" id="cartList">
+                    <li class="list-group-item text-muted text-center">
+                        No items yet
+                    </li>
+                </ul>
+
+                <div class="d-flex justify-content-between fw-bold mb-3">
+                    <span>Total</span>
+                    <span>₱<span id="totalAmount">0</span></span>
+                </div>
+
+                <button class="btn btn-success w-100 mb-2">
+                    Checkout
+                </button>
+                <button class="btn btn-outline-danger w-100" onclick="clearCart()">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+    </div>
+<script>
+    let total = 0;
+
+    function addToCart(name, price) {
+        const cartList = document.getElementById('cartList');
+
+        if (cartList.children[0].classList.contains('text-muted')) {
+            cartList.innerHTML = '';
+        }
+
+        const item = document.createElement('li');
+        item.className = 'list-group-item d-flex justify-content-between';
+        item.innerHTML = `<span>${name}</span><span>₱${price}</span>`;
+        cartList.appendChild(item);
+
+        total += price;
+        document.getElementById('totalAmount').innerText = total;
+    }
+
+    function clearCart() {
+        document.getElementById('cartList').innerHTML =
+            `<li class="list-group-item text-muted text-center">No items yet</li>`;
+        total = 0;
+        document.getElementById('totalAmount').innerText = total;
+    }
+</script>
+
+@endsection
