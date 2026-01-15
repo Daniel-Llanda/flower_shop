@@ -30,6 +30,11 @@
     </div>
 
     <div class="row g-3 mt-4">
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPosItemModal">
+            <i class="bi bi-plus-circle"></i> Add POS Item
+        </button>
+
+
 
         <!-- LEFT: FLOWER ITEMS -->
         <div class="col-md-7">
@@ -37,33 +42,16 @@
 
             <div class="row g-3">
 
-                <!-- Flower Item -->
-                <div class="col-md-4">
-                    <div class="card card-dashboard card-pink text-center p-3 pos-item"
-                        onclick="addToCart('Rose Bouquet', 1200)">
-                        <i class="bi bi-flower1 fs-1 mb-2"></i>
-                        <h6>Rose Bouquet</h6>
-                        <p class="fw-bold">₱1,200</p>
+                @foreach($posItems as $item)
+                    <div class="col-md-4">
+                        <div class="card card-dashboard text-center p-3 pos-item"
+                                onclick="addToCart('{{ $item->item_name }}', {{ $item->item_price }})">
+                            <i class="bi bi-flower1 fs-1 mb-2"></i>
+                            <h6>{{ $item->item_name }}</h6>
+                            <p class="fw-bold">₱{{ number_format($item->item_price, 2) }}</p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card card-dashboard card-purple text-center p-3 pos-item"
-                        onclick="addToCart('Tulip Bundle', 950)">
-                        <i class="bi bi-flower1 fs-1 mb-2"></i>
-                        <h6>Tulip Bundle</h6>
-                        <p class="fw-bold">₱950</p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card card-dashboard card-yellow text-center p-3 pos-item"
-                        onclick="addToCart('Sunflower Set', 850)">
-                        <i class="bi bi-flower1 fs-1 mb-2"></i>
-                        <h6>Sunflower Set</h6>
-                        <p class="fw-bold">₱850</p>
-                    </div>
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -120,5 +108,49 @@
         document.getElementById('totalAmount').innerText = total;
     }
 </script>
+
+<div class="modal fade" id="addPosItemModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- modal-lg makes it larger -->
+        <div class="modal-content">
+            <form method="POST" action="{{ route('pos-items.store') }}">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Add POS Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Item Name</label>
+                            <input type="text" name="item_name" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Price (₱)</label>
+                            <input type="number" step="0.01" name="item_price" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Item Type</label>
+                            <select name="item_type" class="form-select" required>
+                                <option value="">Select type</option>
+                                <option value="bundle">Bundle</option>
+                                <option value="per_stem">Per Stem</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 @endsection

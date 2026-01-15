@@ -46,6 +46,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
         Route::get('/flowers', [AdminController::class, 'flowers'])->name('admin.flowers');
         Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
+        Route::post('/pos-items/store', [AdminController::class, 'store'])->name('pos-items.store');
+
         
 
     });

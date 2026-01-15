@@ -52,16 +52,47 @@
             padding: 20px;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            .content {
-                margin-left: 0;
-            }
-        }
+   /* Hide text and show only icons on tablets */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .sidebar {
+        width: 80px; /* narrow sidebar for icons only */
+        text-align: center;
+        padding-top: 56px;
+    }
+
+    .sidebar .nav-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.5rem;
+    }
+
+    .sidebar .nav-text {
+        display: none;
+    }
+
+    .content {
+        margin-left: 80px; /* match sidebar width */
+    }
+}
+
+/* Full sidebar on desktop */
+@media (min-width: 992px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .sidebar .nav-text {
+        display: inline;
+    }
+
+    .content {
+        margin-left: 220px;
+    }
+}
 
         /* Cards */
         .card-dashboard {
@@ -110,46 +141,53 @@
     </nav>
 
     <!-- Sidebar -->
-    <div class="sidebar d-none d-md-block">
-        <ul class="nav flex-column pt-3">
+<!-- Sidebar -->
+<div class="sidebar d-none d-md-block">
+    <ul class="nav flex-column pt-3">
 
-            <li class="nav-item mb-1">
-                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                href="{{ route('admin.dashboard') }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
-                </a>
-            </li>
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+               href="{{ route('admin.dashboard') }}">
+                <i class="bi bi-speedometer2"></i>
+                <span class="nav-text">Dashboard</span>
+            </a>
+        </li>
 
-            <li class="nav-item mb-1">
-                <a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
-                href="{{ route('admin.users') }}">
-                    <i class="bi bi-people"></i> Users
-                </a>
-            </li>
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
+               href="{{ route('admin.users') }}">
+                <i class="bi bi-people"></i>
+                <span class="nav-text">Users</span>
+            </a>
+        </li>
 
-            <li class="nav-item mb-1">
-                <a class="nav-link {{ request()->routeIs('admin.orders') ? 'active' : '' }}"
-                href="{{ route('admin.orders') }}">
-                    <i class="bi bi-basket"></i> Orders
-                </a>
-            </li>
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.orders') ? 'active' : '' }}"
+               href="{{ route('admin.orders') }}">
+                <i class="bi bi-basket"></i>
+                <span class="nav-text">Orders</span>
+            </a>
+        </li>
 
-            <li class="nav-item mb-1">
-                <a class="nav-link {{ request()->routeIs('admin.flowers') ? 'active' : '' }}"
-                href="{{ route('admin.flowers') }}">
-                    <i class="bi bi-flower1"></i> Flowers
-                </a>
-            </li>
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.flowers') ? 'active' : '' }}"
+               href="{{ route('admin.flowers') }}">
+                <i class="bi bi-flower1"></i>
+                <span class="nav-text">Flowers</span>
+            </a>
+        </li>
 
-            <li class="nav-item mb-1">
-                <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
-                href="{{ route('admin.reports') }}">
-                    <i class="bi bi-file-earmark-text"></i> Reports
-                </a>
-            </li>
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
+               href="{{ route('admin.reports') }}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="nav-text">Reports</span>
+            </a>
+        </li>
 
-        </ul>
-    </div>
+    </ul>
+</div>
+
 
 
 
