@@ -47,6 +47,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/flowers', [AdminController::class, 'flowers'])->name('admin.flowers');
         Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
         Route::post('/pos-items/store', [AdminController::class, 'store'])->name('pos-items.store');
+        Route::post('/checkout', [AdminController::class, 'storeOrder'])->name('checkout.store');
+        Route::patch('/admin/orders/{order}/complete', [AdminController::class, 'complete'])
+            ->name('admin.orders.complete');
+
+        Route::patch('/admin/orders/{order}/cancel', [AdminController::class, 'cancel'])
+            ->name('admin.orders.cancel');
+
+
 
         
 
