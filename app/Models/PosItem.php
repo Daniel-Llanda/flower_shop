@@ -10,5 +10,6 @@ class PosItem extends Model
         'item_name',
         'item_price',
         'item_type',
+        'item_color'
     ];
 }

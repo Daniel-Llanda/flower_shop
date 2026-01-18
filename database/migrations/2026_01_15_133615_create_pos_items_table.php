@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('item_name');
             $table->decimal('item_price', 10, 2);
             $table->enum('item_type', ['bundle', 'per_stem']);
+            $table->string('item_color')->default('primary');
             $table->timestamps();
+
         });
     }
 

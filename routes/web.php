@@ -48,15 +48,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
         Route::post('/pos-items/store', [AdminController::class, 'store'])->name('pos-items.store');
         Route::post('/checkout', [AdminController::class, 'storeOrder'])->name('checkout.store');
-        Route::patch('/admin/orders/{order}/complete', [AdminController::class, 'complete'])
-            ->name('admin.orders.complete');
+        Route::patch('/admin/orders/{order}/complete', [AdminController::class, 'complete'])->name('admin.orders.complete');
 
-        Route::patch('/admin/orders/{order}/cancel', [AdminController::class, 'cancel'])
-            ->name('admin.orders.cancel');
+        Route::patch('/admin/orders/{order}/cancel', [AdminController::class, 'cancel'])->name('admin.orders.cancel');
+        Route::get('/pos-items/edit', [AdminController::class, 'editPosItems'])->name('pos-items.edit');
+        Route::put('/pos-items/{id}', [AdminController::class, 'updatePosItems'])->name('pos-items.update');
+
+        Route::get('/orders/completed', [AdminController::class, 'completedOrders'])->name('admin.completed');
+        Route::get('/orders/cancelled', [AdminController::class, 'cancelledOrders'])->name('admin.cancelled');
 
 
 
-        
+        Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+        // Route::post('/profile/email', [AdminController::class, 'updateEmail'])->name('admin.profile.email');
+        // Route::post('/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
+
 
     });
 

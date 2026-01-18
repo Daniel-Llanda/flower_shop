@@ -19,8 +19,9 @@
         body {
             min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
-            background-color: #fff0f6; /* soft pink background */
+            background-color: #fff; /* soft pink background */
         }
+        
 
         /* Sidebar */
         .sidebar {
@@ -155,24 +156,25 @@
     <ul class="nav flex-column pt-3">
 
         <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-               href="{{ route('admin.dashboard') }}">
+            <a class="nav-link {{ request()->routeIs('admin.dashboard', 'pos-items.edit') ? 'active' : '' }}"
+                href="{{ route('admin.dashboard') }}">
                 <i class="bi bi-speedometer2"></i>
                 <span class="nav-text">Dashboard</span>
             </a>
+
         </li>
 
         <li class="nav-item mb-1">
             <a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
-               href="{{ route('admin.users') }}">
+                href="{{ route('admin.users') }}">
                 <i class="bi bi-people"></i>
                 <span class="nav-text">Users</span>
             </a>
         </li>
 
         <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.orders') ? 'active' : '' }}"
-               href="{{ route('admin.orders') }}">
+            <a class="nav-link {{ request()->routeIs('admin.orders', 'admin.completed', 'admin.cancelled') ? 'active' : '' }}"
+                href="{{ route('admin.orders') }}">
                 <i class="bi bi-basket"></i>
                 <span class="nav-text">Orders</span>
             </a>
@@ -180,7 +182,7 @@
 
         <li class="nav-item mb-1">
             <a class="nav-link {{ request()->routeIs('admin.flowers') ? 'active' : '' }}"
-               href="{{ route('admin.flowers') }}">
+                href="{{ route('admin.flowers') }}">
                 <i class="bi bi-flower1"></i>
                 <span class="nav-text">Flowers</span>
             </a>
@@ -188,9 +190,17 @@
 
         <li class="nav-item mb-1">
             <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
-               href="{{ route('admin.reports') }}">
+                href="{{ route('admin.reports') }}">
                 <i class="bi bi-file-earmark-text"></i>
                 <span class="nav-text">Reports</span>
+            </a>
+        </li>
+
+        <li class="nav-item mb-1">
+            <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}"
+            href="{{ route('admin.profile') }}">
+                <i class="bi bi-person-circle"></i>
+                <span class="nav-text">Profile</span>
             </a>
         </li>
 

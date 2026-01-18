@@ -2,66 +2,80 @@
 
 @section('content')
     <div style="height: 50px;"></div>
-
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="card card-dashboard p-3 card-pink text-center">
-                <i class="bi bi-people fs-1 mb-2"></i>
-                <h5>Users</h5>
-                <p class="fs-4">120</p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card card-dashboard p-3 card-purple text-center">
-                <i class="bi bi-basket fs-1 mb-2"></i>
-                <h5>Orders</h5>
-                <p class="fs-4">45</p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card card-dashboard p-3 card-yellow text-center">
-                <i class="bi bi-flower1 fs-1 mb-2"></i>
-                <h5>Flowers</h5>
-                <p class="fs-4">78</p>
-            </div>
-        </div>
-    </div>
-    <!-- Add POS Item Button -->
-        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addPosItemModal">
-            <i class="bi bi-plus-circle"></i> Add POS Item
-        </button>
-        <button class="btn btn-primary mt-3" id="fullscreenBtn">
-            <i class="bi bi-arrows-fullscreen"></i>Full Screen
-        </button>
-
-    <div class="row g-3 mt-4" id="posArea">
+    <div class="row g-3" id="posArea">
         
 
-        <!-- Fullscreen Button -->
-       
-
         <!-- LEFT: FLOWER ITEMS -->
-        <div class="col-md-7">
-            <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Flower POS</h5>
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between my-2 align-items-center">   
+                <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Flower POS</h5>
+                <div>
+                    <a href="{{ route('pos-items.edit') }}" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Edit POS Item
+                    </a>
+
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPosItemModal">
+                        <i class="bi bi-plus-circle"></i> Add POS Item
+                    </button>
+                </div>
+            </div>
+
+            <select id="colorFilter" class="form-select mb-3" onchange="filterByColor()">
+                <option value="all">All Colors</option>
+
+                @php
+                    $colorNames = [
+                        'primary' => 'Blue',
+                        'secondary' => 'Gray',
+                        'success' => 'Green',
+                        'danger' => 'Red',
+                        'warning' => 'Yellow',
+                        'info' => 'Cyan',
+                        'dark' => 'Dark',
+                    ];
+                @endphp
+
+                @foreach($colors as $color)
+                    <option value="{{ $color }}">
+                        {{ $colorNames[$color] ?? ucfirst($color) }}
+                    </option>
+                @endforeach
+            </select>
+
 
             <div class="row g-3">
+                @php
+                    $lightTextColors = ['primary', 'success', 'danger', 'dark', 'secondary'];
+                @endphp
+
                 @foreach($posItems as $item)
-                    <div class="col-md-4">
-                        <div class="card card-dashboard text-center p-3 pos-item"
+                    @php
+                        $textColor = in_array($item->item_color, $lightTextColors) ? 'text-white' : 'text-dark';
+                    @endphp
+
+                    <div class="col-md-3 pos-item-wrapper" data-color="{{ $item->item_color }}">
+                        <div class="card card-dashboard text-center p-3 pos-item 
+                            bg-{{ $item->item_color }} {{ $textColor }}"
                             onclick="addToCart('{{ $item->item_name }}', {{ $item->item_price }})">
+
                             <i class="bi bi-flower1 fs-1 mb-2"></i>
-                            <h6>{{ $item->item_name }}</h6>
-                            <p class="fw-bold">₱{{ number_format($item->item_price, 2) }}</p>
+
+                            <h6 class="mb-1">{{ $item->item_name }}</h6>
+                            <h6 class="mb-1">{{ $item->item_type }}</h6>
+
+                            <p class="fw-bold mb-0">
+                                ₱{{ number_format($item->item_price, 2) }}
+                            </p>
                         </div>
                     </div>
                 @endforeach
+
+
             </div>
         </div>
 
         <!-- RIGHT: POS CART -->
-        <div class="col-md-5">
+        <div class="col-md-4">
             <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Order List</h5>
 
             <div class="card card-dashboard p-3">
@@ -92,32 +106,20 @@
 <script>
     let cart = {};
     let total = 0;
-    // Fullscreen toggle function
-// Fullscreen toggle function for POS only
-function toggleFullscreen() {
-    const posArea = document.getElementById('posArea');
-    if (!document.fullscreenElement) {
-        posArea.requestFullscreen().catch(err => {
-            console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+    function filterByColor() {
+        const selectedColor = document.getElementById('colorFilter').value;
+        const items = document.querySelectorAll('.pos-item-wrapper');
+
+        items.forEach(item => {
+            const itemColor = item.getAttribute('data-color');
+
+            if (selectedColor === 'all' || itemColor === selectedColor) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
         });
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
     }
-}
-
-// Button click
-document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
-
-// F11 key (toggle only for POS)
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'F11') {
-        e.preventDefault();
-        toggleFullscreen();
-    }
-});
-
     document.querySelector('[data-bs-target="#checkoutModal"]').addEventListener('click', function (e) {
         if (Object.keys(cart).length === 0) {
             alert('Cart is empty!');
@@ -227,12 +229,26 @@ document.addEventListener('keydown', function(e) {
                             <input type="number" step="0.01" name="item_price" class="form-control" required>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="form-label">Item Type</label>
                             <select name="item_type" class="form-select" required>
                                 <option value="">Select type</option>
                                 <option value="bundle">Bundle</option>
                                 <option value="per_stem">Per Stem</option>
+                            </select>
+                        </div>
+
+                        <!-- NEW COLOR SELECT -->
+                        <div class="col-md-6">
+                            <label class="form-label">Button Color</label>
+                            <select name="item_color" class="form-select" required>
+                                <option class="text-primary" value="primary">Blue</option>
+                                <option class="text-secondary" value="secondary">Gray</option>
+                                <option class="text-success" value="success">Green</option>
+                                <option class="text-danger" value="danger">Red</option>
+                                <option class="text-warning" value="warning">Yellow</option>
+                                <option class="text-info" value="info">Cyan</option>
+                                <option class="text-dark" value="dark">Dark</option>
                             </select>
                         </div>
                     </div>
@@ -243,6 +259,7 @@ document.addEventListener('keydown', function(e) {
                     <button class="btn btn-success">Save Item</button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -328,44 +345,43 @@ document.addEventListener('keydown', function(e) {
     </div>
 </div>
 <script>
-function openReceipt() {
-    const receiptList = document.getElementById('receiptList');
-    receiptList.innerHTML = '';
+    function openReceipt() {
+        const receiptList = document.getElementById('receiptList');
+        receiptList.innerHTML = '';
 
-    let cartData = [];
-    let total = 0;
+        let cartData = [];
+        let total = 0;
 
-    Object.keys(cart).forEach(name => {
-        const item = cart[name];
-        const subtotal = item.price * item.quantity;
-        total += subtotal;
+        Object.keys(cart).forEach(name => {
+            const item = cart[name];
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
 
-        receiptList.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between">
-                <span>${name} x ${item.quantity}</span>
-                <span>₱${subtotal}</span>
-            </li>
-        `;
+            receiptList.innerHTML += `
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>${name} x ${item.quantity}</span>
+                    <span>₱${subtotal}</span>
+                </li>
+            `;
 
-        cartData.push({
-            name: name,
-            price: item.price,
-            quantity: item.quantity
+            cartData.push({
+                name: name,
+                price: item.price,
+                quantity: item.quantity
+            });
         });
-    });
 
-    document.getElementById('receiptTotal').innerText = total;
-    document.getElementById('hiddenTotal').value = total;
-    document.getElementById('cartInput').value = JSON.stringify(cartData);
-}
+        document.getElementById('receiptTotal').innerText = total;
+        document.getElementById('hiddenTotal').value = total;
+        document.getElementById('cartInput').value = JSON.stringify(cartData);
+    }
 
-function toggleDelivery(type) {
-    document.getElementById('deliveryTimeDiv')
-        .classList.toggle('d-none', type !== 'delivery');
-}
+    function toggleDelivery(type) {
+        document.getElementById('deliveryTimeDiv')
+            .classList.toggle('d-none', type !== 'delivery');
+    }
 
-document.getElementById('checkoutModal')
-    .addEventListener('show.bs.modal', openReceipt);
+    document.getElementById('checkoutModal').addEventListener('show.bs.modal', openReceipt);
 </script>
 
 
