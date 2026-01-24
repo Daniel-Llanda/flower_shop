@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PosItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -15,13 +16,18 @@ class AdminController extends Controller
         $colors = PosItem::whereNotNull('item_color')
             ->distinct()
             ->pluck('item_color');
-        return view('admin.dashboard', compact('posItems', 'colors'));
 
+        $occasions = PosItem::whereNotNull('item_occasion')
+            ->where('item_occasion', '!=', '')
+            ->distinct()
+            ->pluck('item_occasion');
+        return view('admin.dashboard', compact('posItems', 'colors', 'occasions'));
     }
 
     public function users()
     {
-        return view('admin.users');
+        $users = User::all();
+        return view('admin.users', compact('users'));
     }
 
     public function orders()
@@ -48,6 +54,7 @@ class AdminController extends Controller
             'item_price' => 'required|numeric|min:0',
             'item_type'  => 'required|in:bundle,per_stem',
             'item_color' => 'required|in:primary,secondary,success,danger,warning,info,dark',
+            'item_occasion'  => 'nullable|string|max:255',
         ]);
 
         PosItem::create($request->all());
@@ -144,6 +151,25 @@ class AdminController extends Controller
     public function profile()
     {
         return view('admin.profile');
+    }
+    public function updateEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:admins,email,' . auth()->guard('admin')->id(),
+        ]);
+
+        $admin = auth()->guard('admin')->user();
+        $admin->email = $request->email;
+        $admin->save();
+
+        return redirect()->back()->with('success', 'Email updated successfully.');
+    }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]); 
+        return redirect()->back()->with('success', 'Password updated successfully.');
     }
 
     

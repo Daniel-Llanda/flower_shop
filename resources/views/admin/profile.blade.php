@@ -18,7 +18,7 @@
         <div class="card card-dashboard p-4">
             <h5 class="fw-bold mb-3">Update Email</h5>
 
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('admin.profile.email') }}">
                 @csrf
 
                 <div class="mb-3">
@@ -26,7 +26,7 @@
                     <input type="email"
                             name="email"
                             class="form-control"
-                           value="{{ auth()->user()->email }}"
+                           value="{{ old('email', auth('admin')->user()->email) }}"
 
                             required>
                 </div>

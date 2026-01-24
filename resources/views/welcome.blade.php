@@ -31,13 +31,13 @@
                         <a href="{{ route('login') }}" class="hover:underline">
                             Login
                         </a>
-
+<!-- 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
                             class="px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-600 transition">
                                 Register
                             </a>
-                        @endif
+                        @endif -->
                     @endauth
                 </nav>
             @endif

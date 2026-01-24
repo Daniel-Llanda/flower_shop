@@ -19,28 +19,45 @@
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <select id="colorFilter" class="form-select mb-3" onchange="filterByColor()">
+                        <option value="all">All Colors</option>
 
-            <select id="colorFilter" class="form-select mb-3" onchange="filterByColor()">
-                <option value="all">All Colors</option>
+                        @php
+                            $colorNames = [
+                                'primary' => 'Blue',
+                                'secondary' => 'Gray',
+                                'success' => 'Green',
+                                'danger' => 'Red',
+                                'warning' => 'Yellow',
+                                'info' => 'Cyan',
+                                'dark' => 'Dark',
+                            ];
+                        @endphp
 
-                @php
-                    $colorNames = [
-                        'primary' => 'Blue',
-                        'secondary' => 'Gray',
-                        'success' => 'Green',
-                        'danger' => 'Red',
-                        'warning' => 'Yellow',
-                        'info' => 'Cyan',
-                        'dark' => 'Dark',
-                    ];
-                @endphp
+                        @foreach($colors as $color)
+                            <option value="{{ $color }}">
+                                {{ $colorNames[$color] ?? ucfirst($color) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                @foreach($colors as $color)
-                    <option value="{{ $color }}">
-                        {{ $colorNames[$color] ?? ucfirst($color) }}
-                    </option>
-                @endforeach
-            </select>
+                <div class="col-md-6">
+                    <select id="occasionFilter" class="form-select mb-3" onchange="filterByOccasion()">
+                        <option value="all">All Occasions</option>
+
+                        @foreach($occasions as $occasion)
+                            <option value="{{ $occasion }}">
+                                {{ $occasion }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+
 
 
             <div class="row g-3">
@@ -53,7 +70,7 @@
                         $textColor = in_array($item->item_color, $lightTextColors) ? 'text-white' : 'text-dark';
                     @endphp
 
-                    <div class="col-md-3 pos-item-wrapper" data-color="{{ $item->item_color }}">
+                    <div class="col-md-3 pos-item-wrapper" data-color="{{ $item->item_color }}"  data-occasion="{{ $item->item_occasion ?? '' }}">
                         <div class="card card-dashboard text-center p-3 pos-item 
                             bg-{{ $item->item_color }} {{ $textColor }}"
                             onclick="addToCart('{{ $item->item_name }}', {{ $item->item_price }})">
@@ -62,6 +79,7 @@
 
                             <h6 class="mb-1">{{ $item->item_name }}</h6>
                             <h6 class="mb-1">{{ $item->item_type }}</h6>
+                            <h6 class="mb-1">{{ $item->item_occasion }}</h6>
 
                             <p class="fw-bold mb-0">
                                 ₱{{ number_format($item->item_price, 2) }}
@@ -106,6 +124,21 @@
 <script>
     let cart = {};
     let total = 0;
+
+     function filterByOccasion() {
+        const selectedOccasion = document.getElementById('occasionFilter').value;
+        const items = document.querySelectorAll('.pos-item-wrapper');
+
+        items.forEach(item => {
+            const itemOccasion = item.getAttribute('data-occasion');
+
+            if (selectedOccasion === 'all' || itemOccasion === selectedOccasion) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
     function filterByColor() {
         const selectedColor = document.getElementById('colorFilter').value;
         const items = document.querySelectorAll('.pos-item-wrapper');
@@ -251,6 +284,31 @@
                                 <option class="text-dark" value="dark">Dark</option>
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Occasion</label>
+
+                            <input 
+                                type="text" 
+                                name="item_occasion" 
+                                id="item_occasion"
+                                class="form-control"
+                                placeholder="e.g. Valentine's Day">
+
+                            @if(isset($occasions) && $occasions->count())
+                                <div class="mt-2 d-flex flex-wrap gap-2">
+                                    @foreach($occasions as $occasion)
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-secondary btn-sm"
+                                            onclick="setOccasion('{{ addslashes($occasion) }}')">
+                                            {{ $occasion }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -345,6 +403,9 @@
     </div>
 </div>
 <script>
+    function setOccasion(value) {
+        document.getElementById('item_occasion').value = value;
+    }
     function openReceipt() {
         const receiptList = document.getElementById('receiptList');
         receiptList.innerHTML = '';

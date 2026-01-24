@@ -60,8 +60,8 @@ Route::prefix('admin')->group(function () {
 
 
         Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
-        // Route::post('/profile/email', [AdminController::class, 'updateEmail'])->name('admin.profile.email');
-        // Route::post('/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
+        Route::post('/profile/email', [AdminController::class, 'updateEmail'])->name('admin.profile.email');
+        Route::post('/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
 
 
     });
