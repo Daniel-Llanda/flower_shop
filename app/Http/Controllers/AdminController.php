@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Flower;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PosItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -39,12 +41,51 @@ class AdminController extends Controller
 
     public function flowers()
     {
-        return view('admin.flowers');
+        $flowers = Flower::latest()->get();
+        return view('admin.flowers', compact('flowers'));
     }
 
-    public function reports()
+    public function reports(Request $request)
     {
-        return view('admin.reports');
+    // BASE QUERY (used for counts)
+        $baseQuery = Order::query();
+
+        // COUNTS DEFAULT = ALL ORDERS
+        $counts = [
+            'pending'   => (clone $baseQuery)->where('status', 'pending')->count(),
+            'completed' => (clone $baseQuery)->where('status', 'completed')->count(),
+            'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
+        ];
+
+        // EMPTY orders by default (table hidden)
+        $orders = collect();
+
+        // IF FILTER IS USED
+        if ($request->hasAny(['status', 'from', 'to'])) {
+
+            $filteredQuery = Order::query();
+
+            if ($request->status) {
+                $filteredQuery->where('status', $request->status);
+            }
+
+            if ($request->from && $request->to) {
+                $filteredQuery->whereBetween('created_at', [
+                    $request->from . ' 00:00:00',
+                    $request->to . ' 23:59:59'
+                ]);
+            }
+
+            // TABLE DATA
+            $orders = $filteredQuery->latest()->get();
+
+            // UPDATE COUNTS BASED ON FILTER
+            $counts['pending']   = (clone $filteredQuery)->where('status', 'pending')->count();
+            $counts['completed'] = (clone $filteredQuery)->where('status', 'completed')->count();
+            $counts['cancelled'] = (clone $filteredQuery)->where('status', 'cancelled')->count();
+        }
+
+        return view('admin.reports', compact('orders', 'counts'));
     }
 
     public function store(Request $request)
@@ -171,6 +212,77 @@ class AdminController extends Controller
         ]); 
         return redirect()->back()->with('success', 'Password updated successfully.');
     }
+
+
+    public function downloadPdf(Request $request)
+    {
+        $query = Order::query();
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->from && $request->to) {
+            $query->whereBetween('created_at', [
+                $request->from . ' 00:00:00',
+                $request->to . ' 23:59:59'
+            ]);
+        }
+
+        $orders = $query->latest()->get();
+
+        $pdf = Pdf::loadView('admin.reports_pdf', compact('orders'));
+
+        return $pdf->download('filtered-orders-report.pdf');
+    }
+
+    public function storeFlower(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image'
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('flowers', 'public');
+        }
+
+        Flower::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'image' => $imagePath,
+        ]);
+
+        return back()->with('success', 'Flower added successfully');
+    }
+
+    public function destroy($id)
+    {
+        PosItem::findOrFail($id)->delete();
+
+        return redirect()->back()->with('success', 'POS item deleted successfully.');
+    }
+
+    public function updateFlower(Request $request, $id)
+    {
+        $flower = Flower::findOrFail($id);
+
+        $flower->update($request->only('name','price','description'));
+
+        return back()->with('success', 'Flower updated successfully.');
+    }
+
+    public function destroyFlower($id)
+    {
+        Flower::findOrFail($id)->delete();
+        return back()->with('success', 'Flower deleted successfully.');
+    }
+
+
+
 
     
 

@@ -2,14 +2,13 @@
 
 @section('content')
 <div style="height: 50px;"></div>
-<h2 class="fw-bold mb-4" style="color:#8b4d6b;">Users</h2>
+<h2 class="fw-bold mb-4" style="color:#064e3b;">Users</h2>
 
 <div class="card card-dashboard p-4">
-    <p class="text-muted">Manage your POS items here.</p>
 
     @if($users->isEmpty())
         <div class="alert alert-warning text-center">
-            No POS items found.
+            No users found.
         </div>
     @else
         <div class="table-responsive">

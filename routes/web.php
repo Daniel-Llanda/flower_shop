@@ -5,10 +5,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Admin\AuthController;
-
+use App\Models\Flower;
 
 Route::get('/', function () {
-    return view('welcome');
+    $flowers = Flower::latest()->get();
+    return view('welcome', compact('flowers'));
 });
 
 Route::get('/dashboard', function () {
@@ -62,6 +63,18 @@ Route::prefix('admin')->group(function () {
         Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
         Route::post('/profile/email', [AdminController::class, 'updateEmail'])->name('admin.profile.email');
         Route::post('/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
+
+
+        Route::get('/admin/reports/pdf', [AdminController::class, 'downloadPdf'])->name('admin.reports.pdf');
+        Route::post('/flowers', [AdminController::class, 'storeFlower'])->name('admin.flowers.store');
+
+        Route::delete('/pos-items/{id}', [AdminController::class, 'destroy'])->name('pos-items.destroy');
+        Route::put('/flowers/{id}', [AdminController::class, 'updateFlower'])->name('admin.flowers.update');
+
+        Route::delete('/flowers/{id}', [AdminController::class, 'destroyFlower'])->name('admin.flowers.destroy');
+
+
+
 
 
     });

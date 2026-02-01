@@ -3,7 +3,7 @@
 @section('content')
 <div style="height: 50px;"></div>
 
-<h2 class="fw-bold mb-4 text-dark">My Profile</h2>
+<h2 class="fw-bold mb-4 text-dark" style="color:#064e3b;">My Profile</h2>
 
 @if(session('success'))
     <div class="alert alert-success">
@@ -31,7 +31,7 @@
                             required>
                 </div>
 
-                <button class="btn btn-primary w-100">
+                <button class="btn btn-success w-100">
                     Update Email
                 </button>
             </form>

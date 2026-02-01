@@ -2,9 +2,10 @@
 
 @section('content')
 <div style="height: 50px;"></div>
+
 <div class="d-flex justify-content-between align-items-center">
-    <h2 class="fw-bold" style="color:#8b4d6b;">Edit POS Items</h2>
-    <a class="btn btn-outline-primary" href="{{ route('admin.dashboard') }}">Back</a>
+    <h2 class="fw-bold" style="color:#064e3b;">Edit POS Items</h2>
+    <a class="btn btn-outline-success" href="{{ route('admin.dashboard') }}">Back</a>
 </div>
 
 
@@ -58,10 +59,27 @@
                                     data-type="{{ $item->item_type }}"
                                     data-color="{{ $item->item_color }}"
                                 >
-
-                                    <i class="bi bi-pencil-square"></i> Edit
+                                    <i class="bi bi-pencil-square"></i>
                                 </button>
+
+                                <button
+                                    class="btn btn-sm btn-danger deleteBtn"
+                                    data-id="{{ $item->id }}"
+                                    data-name="{{ $item->item_name }}"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
+                                <!-- hidden delete form -->
+                                <form id="delete-form-{{ $item->id }}"
+                                    action="{{ route('pos-items.destroy', $item->id) }}"
+                                    method="POST"
+                                    class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -118,7 +136,6 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button class="btn btn-success">Update Item</button>
                 </div>
             </div>
@@ -128,6 +145,7 @@
 
 <script>
     $(document).ready(function () {
+
         $('#posItemsTable').DataTable({
             ordering: true,
             order: [[0, 'desc']],
@@ -138,7 +156,7 @@
 
             $('#editItemName').val($(this).data('name'));
             $('#editItemPrice').val($(this).data('price'));
-            $('#editItemType').val($(this).data('type')); // ✅ FIXED
+            $('#editItemType').val($(this).data('type'));
             $('#editItemColor').val($(this).data('color'));
 
             let route = $('#updateRoute').val().replace(':id', id);
@@ -147,8 +165,29 @@
             new bootstrap.Modal(document.getElementById('editPosItemModal')).show();
         });
 
+        // ✅ DELETE CONFIRMATION
+        $('.deleteBtn').on('click', function () {
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Delete "${name}" permanently?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${id}`).submit();
+                }
+            });
+        });
+
     });
 </script>
+
 
 @endsection
 

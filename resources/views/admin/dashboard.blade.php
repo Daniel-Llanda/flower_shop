@@ -8,13 +8,13 @@
         <!-- LEFT: FLOWER ITEMS -->
         <div class="col-md-8">
             <div class="d-flex justify-content-between my-2 align-items-center">   
-                <h5 class="fw-bold mb-3" style="color:#8b4d6b;">Flower POS</h5>
+                <h5 class="fw-bold mb-3" style="color:#064e3b;">Flower POS</h5>
                 <div>
-                    <a href="{{ route('pos-items.edit') }}" class="btn btn-success">
+                    <a href="{{ route('pos-items.edit') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle"></i> Edit POS Item
                     </a>
 
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPosItemModal">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPosItemModal">
                         <i class="bi bi-plus-circle"></i> Add POS Item
                     </button>
                 </div>

@@ -34,7 +34,7 @@
                 <x-input-label for="email" value="Email Address" class="text-gray-700"/>
                 <x-text-input
                     id="email"
-                    class="block mt-1 w-full rounded-lg border-gray-300 focus:border-pink-400 focus:ring-pink-400"
+                    class="block mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-400 focus:ring-emerald-400"
                     type="email"
                     name="email"
                     :value="old('email')"
@@ -50,7 +50,7 @@
                 <x-input-label for="password" value="Password" class="text-gray-700"/>
                 <x-text-input
                     id="password"
-                    class="block mt-1 w-full rounded-lg border-gray-300 focus:border-pink-400 focus:ring-pink-400"
+                    class="block mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-400 focus:ring-emerald-400"
                     type="password"
                     name="password"
                     required
@@ -61,7 +61,7 @@
 
             <!-- Login Button -->
             <x-primary-button
-                class="w-full justify-center bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 rounded-lg py-3 text-base">
+                class="w-full justify-center bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 rounded-lg py-3 text-base">
                 Admin Login
             </x-primary-button>
         </form>

@@ -15,13 +15,14 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
-            background-color: #fff; /* soft pink background */
+            background-color: #f0fdf4; /* soft greenish-gray background */
         }
-        
 
         /* Sidebar */
         .sidebar {
@@ -29,26 +30,27 @@
             position: fixed;
             top: 0;
             left: 0;
-            padding-top: 56px; /* navbar height */
-            background-color: #ffe6f0; /* pastel pink */
+            padding-top: 56px;
+            background-color: #064e3b; /* dark green */
             width: 220px;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
         }
 
         .sidebar .nav-link {
-            color: #8b4d6b;
+            color: #d1fae5; /* soft green text */
             font-weight: 500;
             padding: 12px 20px;
             display: flex;
             align-items: center;
             border-radius: 8px;
             margin: 4px 10px;
+            transition: all 0.2s ease;
         }
 
         .sidebar .nav-link.active,
         .sidebar .nav-link:hover {
-            background-color: #f9c1d9; /* soft hover */
-            color: #fff;
+            background-color: #10b981; /* emerald green hover */
+            color: #ffffff;
         }
 
         .sidebar .nav-link i {
@@ -59,81 +61,90 @@
         /* Main content */
         .content {
             margin-left: 220px;
-            padding: 20px;
+            padding: 24px;
+            
         }
 
-   /* Hide text and show only icons on tablets */
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .sidebar {
-        width: 80px; /* narrow sidebar for icons only */
-        text-align: center;
-        padding-top: 56px;
-    }
+        /* Tablet: icon-only sidebar */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                text-align: center;
+            }
 
-    .sidebar .nav-link {
-        justify-content: center;
-        padding: 12px 0;
-    }
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 12px 0;
+            }
 
-    .sidebar .nav-link i {
-        margin-right: 0;
-        font-size: 1.5rem;
-    }
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.5rem;
+            }
 
-    .sidebar .nav-text {
-        display: none;
-    }
+            .sidebar .nav-text {
+                display: none;
+            }
 
-    .content {
-        margin-left: 80px; /* match sidebar width */
-    }
-}
+            .content {
+                margin-left: 80px;
+            }
+        }
 
-/* Full sidebar on desktop */
-@media (min-width: 992px) {
-    .sidebar {
-        width: 220px;
-    }
+        /* Desktop */
+        @media (min-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
 
-    .sidebar .nav-text {
-        display: inline;
-    }
+            .sidebar .nav-text {
+                display: inline;
+            }
 
-    .content {
-        margin-left: 220px;
-    }
-}
+            .content {
+                margin-left: 220px;
+            }
+        }
 
-        /* Cards */
+        /* Dashboard cards */
         .card-dashboard {
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border: none;
         }
 
-        .card-pink {
-            background: linear-gradient(135deg, #f9c1d9, #ffcce3);
-            color: #5a2a3c;
+        .card-primary {
+            background: linear-gradient(135deg, #16a34a, #065f46); /* green gradient */
+            color: #ffffff;
         }
 
-        .card-purple {
-            background: linear-gradient(135deg, #d8b4f8, #e9d5ff);
-            color: #4b1f6d;
+        .card-success {
+            background: linear-gradient(135deg, #22c55e, #14532d); /* lighter green gradient */
+            color: #ffffff;
         }
 
-        .card-yellow {
-            background: linear-gradient(135deg, #fff4e6, #ffe8cc);
-            color: #a6631b;
+        .card-warning {
+            background: linear-gradient(135deg, #fbbf24, #713f12); /* optional yellow for alerts */
+            color: #ffffff;
         }
 
+        /* Navbar */
         .navbar-custom {
-            background-color: #ff66a3; /* pastel magenta */
+            background-color: #064e3b; /* dark green navbar */
         }
 
         .navbar-custom .navbar-brand,
         .navbar-custom .btn-outline-light {
-            color: #fff;
+            color: #d1fae5; /* soft green text */
+        }
+
+        .navbar-custom .btn-outline-light:hover {
+            background-color: #10b981; /* emerald hover */
+            border-color: #10b981;
         }
     </style>
+
+
 </head>
 <body>
 
@@ -151,61 +162,60 @@
     </nav>
 
     <!-- Sidebar -->
-<!-- Sidebar -->
-<div class="sidebar d-none d-md-block">
-    <ul class="nav flex-column pt-3">
+    <div class="sidebar d-none d-md-block">
+        <ul class="nav flex-column pt-3">
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.dashboard', 'pos-items.edit') ? 'active' : '' }}"
-                href="{{ route('admin.dashboard') }}">
-                <i class="bi bi-speedometer2"></i>
-                <span class="nav-text">Dashboard</span>
-            </a>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.dashboard', 'pos-items.edit') ? 'active' : '' }}"
+                    href="{{ route('admin.dashboard') }}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
 
-        </li>
+            </li>
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
-                href="{{ route('admin.users') }}">
-                <i class="bi bi-people"></i>
-                <span class="nav-text">Users</span>
-            </a>
-        </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}"
+                    href="{{ route('admin.users') }}">
+                    <i class="bi bi-people"></i>
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.orders', 'admin.completed', 'admin.cancelled') ? 'active' : '' }}"
-                href="{{ route('admin.orders') }}">
-                <i class="bi bi-basket"></i>
-                <span class="nav-text">Orders</span>
-            </a>
-        </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.orders', 'admin.completed', 'admin.cancelled') ? 'active' : '' }}"
+                    href="{{ route('admin.orders') }}">
+                    <i class="bi bi-basket"></i>
+                    <span class="nav-text">Orders</span>
+                </a>
+            </li>
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.flowers') ? 'active' : '' }}"
-                href="{{ route('admin.flowers') }}">
-                <i class="bi bi-flower1"></i>
-                <span class="nav-text">Flowers</span>
-            </a>
-        </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.flowers') ? 'active' : '' }}"
+                    href="{{ route('admin.flowers') }}">
+                    <i class="bi bi-flower1"></i>
+                    <span class="nav-text">Flowers</span>
+                </a>
+            </li>
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
-                href="{{ route('admin.reports') }}">
-                <i class="bi bi-file-earmark-text"></i>
-                <span class="nav-text">Reports</span>
-            </a>
-        </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
+                    href="{{ route('admin.reports') }}">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span class="nav-text">Reports</span>
+                </a>
+            </li>
 
-        <li class="nav-item mb-1">
-            <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}"
-            href="{{ route('admin.profile') }}">
-                <i class="bi bi-person-circle"></i>
-                <span class="nav-text">Profile</span>
-            </a>
-        </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}"
+                href="{{ route('admin.profile') }}">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="nav-text">Profile</span>
+                </a>
+            </li>
 
-    </ul>
-</div>
+        </ul>
+    </div>
 
 
 
@@ -217,5 +227,44 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#2563eb'
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                    confirmButtonColor: '#dc2626'
+                });
+            @endif
+
+            @if ($errors->any())
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    html: `
+                        <ul style="text-align:left;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    confirmButtonColor: '#dc2626'
+                });
+            @endif
+
+        });
+    </script>
+
 </body>
 </html>

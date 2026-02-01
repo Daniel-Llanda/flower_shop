@@ -15,9 +15,6 @@
                    
                 </div>
 
-                <p class="text-sm text-gray-500 mt-1">
-                    FLOWERSHOP & more
-                </p>
             </div>
 
             <!-- Session Status -->
@@ -31,7 +28,7 @@
                     <x-input-label for="email" value="Email Address" class="text-gray-700"/>
                     <x-text-input
                         id="email"
-                        class="block mt-1 w-full rounded-lg border-gray-300 focus:border-pink-400 focus:ring-pink-400"
+                        class="block mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-400 focus:ring-emerald-400"
                         type="email"
                         name="email"
                         :value="old('email')"
@@ -48,7 +45,7 @@
                     <x-input-label for="password" value="Password" class="text-gray-700"/>
                     <x-text-input
                         id="password"
-                        class="block mt-1 w-full rounded-lg border-gray-300 focus:border-pink-400 focus:ring-pink-400"
+                        class="block mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-400 focus:ring-emerald-400"
                         type="password"
                         name="password"
                         required
@@ -64,14 +61,14 @@
                         <input
                             type="checkbox"
                             name="remember"
-                            class="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                            class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                         >
                         <span class="ml-2 text-gray-600">Remember me</span>
                     </label>
 
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}"
-                           class="text-pink-600 hover:text-pink-800">
+                           class="text-emerald-600 hover:text-emerald-800">
                             Forgot password?
                         </a>
                     @endif
@@ -79,7 +76,7 @@
 
                 <!-- Login Button -->
                 <x-primary-button
-                    class="w-full justify-center bg-pink-600 hover:bg-pink-700 focus:ring-pink-500 rounded-lg py-3 text-base">
+                    class="w-full justify-center bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 rounded-lg py-3 text-base">
                     Log in
                 </x-primary-button>
 

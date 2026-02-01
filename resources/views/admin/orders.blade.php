@@ -3,12 +3,12 @@
 @section('content')
 <div style="height: 50px;"></div>
 
-<h2 class="fw-bold mb-4 text-dark">Orders</h2>
+<h2 class="fw-bold mb-4" style="color: #064e3b;">Orders</h2>
 
 <div class="ms-2 mb-3">
-    <a href="{{ route('admin.orders') }}" class="btn btn-primary">Pending</a>
-    <a href="{{ route('admin.completed') }}" class="btn btn-outline-primary">Completed</a>
-    <a href="{{ route('admin.cancelled') }}" class="btn btn-outline-primary">Cancelled</a>
+    <a href="{{ route('admin.orders') }}" class="btn btn-success">Pending</a>
+    <a href="{{ route('admin.completed') }}" class="btn btn-outline-success">Completed</a>
+    <a href="{{ route('admin.cancelled') }}" class="btn btn-outline-success">Cancelled</a>
 </div>
 
 @if($pendingOrders->isEmpty())

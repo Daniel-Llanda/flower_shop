@@ -6,9 +6,9 @@
 <h2 class="fw-bold mb-4 text-dark">Orders</h2>
 
 <div class="ms-2 mb-3">
-    <a href="{{ route('admin.orders') }}" class="btn btn-outline-primary">Pending</a>
-    <a href="{{ route('admin.completed') }}" class="btn btn-primary">Completed</a>
-    <a href="{{ route('admin.cancelled') }}" class="btn btn-outline-primary">Cancelled</a>
+    <a href="{{ route('admin.orders') }}" class="btn btn-outline-success">Pending</a>
+    <a href="{{ route('admin.completed') }}" class="btn btn-success">Completed</a>
+    <a href="{{ route('admin.cancelled') }}" class="btn btn-outline-success">Cancelled</a>
 </div>
 
 
@@ -41,7 +41,7 @@
                             <td>{{ $order->created_at->format('M d, Y') }}</td>
                             <td>
                                 <!-- VIEW DETAILS BUTTON -->
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                <button class="btn btn-sm btn-success" data-bs-toggle="modal"
                                         data-bs-target="#orderModal{{ $order->id }}">
                                     View Details
                                 </button>
