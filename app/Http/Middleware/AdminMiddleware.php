@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Flower;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,4 +23,13 @@ class AdminMiddleware
 
         return $next($request);
     }
+    public function toggleVisibility($id)
+    {
+        $flower = Flower::findOrFail($id);
+        $flower->is_visible = ! $flower->is_visible;
+        $flower->save();
+
+        return back()->with('success', 'Flower visibility updated.');
+    }
+
 }

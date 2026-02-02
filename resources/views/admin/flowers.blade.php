@@ -9,7 +9,11 @@
     </button>
 </div>
 
-
+@if($flowers->isEmpty())
+    <div class="alert alert-info text-center">
+        No flowers yet. Click <strong>“Add Flower”</strong> to get started.
+    </div>
+@else
 <div class="card card-dashboard p-4">
     <table class="table table-bordered align-middle" id="flowerTable">
         <thead>
@@ -61,6 +65,25 @@
                             @csrf
                             @method('DELETE')
                         </form>
+                        <form action="{{ route('admin.flowers.toggle', $flower->id) }}"
+                            method="POST"
+                            class="d-inline">
+                            @csrf
+                            @method('PATCH')
+
+                            <button
+                                type="submit"
+                                class="btn btn-sm {{ $flower->is_visible ? 'btn-secondary' : 'btn-success' }}"
+                                title="{{ $flower->is_visible ? 'Hide Flower' : 'Unhide Flower' }}"
+                            >
+                                @if($flower->is_visible)
+                                    <i class="bi bi-eye-slash"></i>
+                                @else
+                                    <i class="bi bi-eye"></i>
+                                @endif
+                            </button>
+                        </form>
+
                     </td>
                 </tr>
 
@@ -72,6 +95,10 @@
         </tbody>
     </table>
 </div>
+@endif
+
+
+
 <div class="modal fade" id="addFlowerModal">
     <div class="modal-dialog">
         <form method="POST" action="{{ route('admin.flowers.store') }}" enctype="multipart/form-data" class="modal-content">

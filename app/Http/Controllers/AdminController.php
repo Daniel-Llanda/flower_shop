@@ -47,46 +47,38 @@ class AdminController extends Controller
 
     public function reports(Request $request)
     {
-    // BASE QUERY (used for counts)
-        $baseQuery = Order::query();
-
-        // COUNTS DEFAULT = ALL ORDERS
+        // 🔒 SUMMARY COUNTS (ALWAYS ALL ORDERS)
         $counts = [
-            'pending'   => (clone $baseQuery)->where('status', 'pending')->count(),
-            'completed' => (clone $baseQuery)->where('status', 'completed')->count(),
-            'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
+            'pending'   => Order::where('status', 'pending')->count(),
+            'completed' => Order::where('status', 'completed')->count(),
+            'cancelled' => Order::where('status', 'cancelled')->count(),
         ];
 
-        // EMPTY orders by default (table hidden)
+        // EMPTY TABLE BY DEFAULT
         $orders = collect();
 
-        // IF FILTER IS USED
+        // 🔄 TABLE FILTERS ONLY
         if ($request->hasAny(['status', 'from', 'to'])) {
 
-            $filteredQuery = Order::query();
+            $query = Order::query();
 
             if ($request->status) {
-                $filteredQuery->where('status', $request->status);
+                $query->where('status', $request->status);
             }
 
             if ($request->from && $request->to) {
-                $filteredQuery->whereBetween('created_at', [
+                $query->whereBetween('created_at', [
                     $request->from . ' 00:00:00',
                     $request->to . ' 23:59:59'
                 ]);
             }
 
-            // TABLE DATA
-            $orders = $filteredQuery->latest()->get();
-
-            // UPDATE COUNTS BASED ON FILTER
-            $counts['pending']   = (clone $filteredQuery)->where('status', 'pending')->count();
-            $counts['completed'] = (clone $filteredQuery)->where('status', 'completed')->count();
-            $counts['cancelled'] = (clone $filteredQuery)->where('status', 'cancelled')->count();
+            $orders = $query->latest()->get();
         }
 
         return view('admin.reports', compact('orders', 'counts'));
     }
+
 
     public function store(Request $request)
     {
@@ -279,6 +271,14 @@ class AdminController extends Controller
     {
         Flower::findOrFail($id)->delete();
         return back()->with('success', 'Flower deleted successfully.');
+    }
+    public function toggleVisibility($id)
+    {
+        $flower = Flower::findOrFail($id);
+        $flower->is_visible = ! $flower->is_visible;
+        $flower->save();
+
+        return back()->with('success', 'Flower visibility updated.');
     }
 
 

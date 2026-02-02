@@ -8,9 +8,13 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Models\Flower;
 
 Route::get('/', function () {
-    $flowers = Flower::latest()->get();
+    $flowers = Flower::where('is_visible', true)
+        ->latest()
+        ->get();
+
     return view('welcome', compact('flowers'));
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -72,6 +76,7 @@ Route::prefix('admin')->group(function () {
         Route::put('/flowers/{id}', [AdminController::class, 'updateFlower'])->name('admin.flowers.update');
 
         Route::delete('/flowers/{id}', [AdminController::class, 'destroyFlower'])->name('admin.flowers.destroy');
+        Route::patch('/flowers/{id}/toggle', [AdminController::class, 'toggleVisibility'])->name('admin.flowers.toggle');
 
 
 

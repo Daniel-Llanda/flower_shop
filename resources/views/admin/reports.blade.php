@@ -69,6 +69,15 @@
 @if(request()->hasAny(['status', 'from', 'to']))
 
     <div class="card card-dashboard p-4">
+        @if(request('from') && request('to'))
+            <div class="mb-3 text-muted">
+                <strong>Date Range:</strong>
+                {{ \Carbon\Carbon::parse(request('from'))->format('M d, Y') }}
+                –
+                {{ \Carbon\Carbon::parse(request('to'))->format('M d, Y') }}
+            </div>
+        @endif
+
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold mb-0">Filtered Orders</h5>

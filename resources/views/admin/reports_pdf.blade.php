@@ -14,6 +14,15 @@
 <body>
 
 <h2>Filtered Orders Report</h2>
+@if($from && $to)
+    <p>
+        <strong>Date Range:</strong>
+        {{ \Carbon\Carbon::parse($from)->format('M d, Y') }}
+        –
+        {{ \Carbon\Carbon::parse($to)->format('M d, Y') }}
+    </p>
+@endif
+
 
 <table>
     <thead>
